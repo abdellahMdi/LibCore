@@ -1,12 +1,13 @@
+```mermaid
 classDiagram
-%% Les Relations
-User <|-- Librarian : Héritage
-User <|-- Member : Héritage
-Member <|-- Student : Héritage
-Member <|-- Teacher : Héritage
-Library o-- Book : Contient (Composition)
-Library o-- User : Contient (Composition)
-Member o-- Book : Emprunte (Association)
+    %% Les Relations
+    User <|-- Librarian : Héritage
+    User <|-- Member : Héritage
+    Member <|-- Student : Héritage
+    Member <|-- Teacher : Héritage
+    Library o-- Book : Contient (Composition)
+    Library o-- User : Contient (Composition)
+    Member o-- Book : Emprunte (Association)
 
     %% Classe Système (Le Chef d'Orchestre)
     class Library {
