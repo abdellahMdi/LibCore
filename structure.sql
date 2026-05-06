@@ -10,7 +10,7 @@ CREATE TABLE `librarians` (
 );
 
 CREATE TABLE `books` (
-  `isbn` INT UNIQUE,
+  `isbn` VARCHAR(20) UNIQUE,
   `titre` VARCHAR(50),
   `auteur` VARCHAR(50),
   `etat` VARCHAR(20),
@@ -26,6 +26,7 @@ CREATE TABLE `members` (
 
 CREATE TABLE `emprunts` (
   `id` INT AUTO_INCREMENT,
+  `borrowing_date` Date,
   `return_date` Date,
   `member_id` INT,
   `book_isbn` INT,
