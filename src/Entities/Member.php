@@ -6,9 +6,9 @@ class Member extends User
 {
     private string $role; // 'Étudiant' ou 'Professeur'
 
-    public function __construct(string $name, string $email, string $role)
+    public function __construct(string $name, string $email, string $role, ?int $id = null)
     {
-        parent::__construct($name, $email);
+        parent::__construct($name,$email,$id);
         $this->role = $role;
     }
 
