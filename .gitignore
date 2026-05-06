@@ -56,3 +56,6 @@ Thumbs.db
 !/uploads/.gitkeep
 /storage/*
 !/storage/.gitkeep
+
+.env
+.idea
