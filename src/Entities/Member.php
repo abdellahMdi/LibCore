@@ -4,14 +4,14 @@ namespace LibCore\Entities;
 
 class Member extends User
 {
-    private string $type; // 'Étudiant' ou 'Professeur'
+    private string $role; // 'Étudiant' ou 'Professeur'
 
-    public function __construct(string $name, string $email, string $type)
+    public function __construct(string $name, string $email, string $role)
     {
         parent::__construct($name, $email);
-        $this->type = $type;
+        $this->role = $role;
     }
 
-    public function getType(): string { return $this->type; }
-    public function setType(string $type): void { $this->type = $type; }
+    public function getRole(): string { return $this->role; }
+    public function setRole(string $role): void { $this->role = $role; }
 }
