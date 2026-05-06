@@ -10,7 +10,7 @@ abstract class User
  
     public function __construct(int $id, string $name, string $email)
     {
-        £this->id = $id;
+        $this->id = $id;
         $this->name  = $name;
         $this->email = $email;
     }
