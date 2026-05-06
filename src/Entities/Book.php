@@ -2,11 +2,11 @@
 namespace LibCore\Entities;
 class Book 
 {
-    private   $isbn ;
-    private   $titre ;
-    private   $auteur ;
-    private   $etat ;
-public function  __construct(  $isbn ,   $titre ,  $auteur ,  $etat)
+    private string  $isbn ;
+    private string  $titre ;
+    private string  $auteur ;
+    private  string $etat ;
+public function  __construct( string $isbn , string  $titre ,string  $auteur , string $etat)
 {
     $this->isbn = $isbn;
     $this->titre=$titre;
