@@ -29,7 +29,7 @@ CREATE TABLE `emprunts` (
   `borrowing_date` Date,
   `return_date` Date,
   `member_id` INT,
-  `book_isbn` INT,
+  `book_isbn` VARCHAR(20),
   PRIMARY KEY (`id`),
   FOREIGN KEY (`book_isbn`)
       REFERENCES `books`(`isbn`),
@@ -41,6 +41,5 @@ CREATE TABLE `users` (
   `id` INT AUTO_INCREMENT,
   `nom` VARCHAR(50),
   `email` VARCHAR(100),
-  `` <type>,
   PRIMARY KEY (`id`)
 );
