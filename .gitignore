@@ -60,3 +60,5 @@ Thumbs.db
 .env
 .idea
 /config
+/config/db.php
+/config/Env.php
