@@ -1,27 +1,58 @@
-# CakePHP 3
+# Composer
+/vendor/
+composer.lock
 
-/vendor/*
-/config/app.php
+# Environment variables
 .env
-/tmp/cache/models/*
-!/tmp/cache/models/empty
-/tmp/cache/persistent/*
-!/tmp/cache/persistent/empty
-/tmp/cache/views/*
-!/tmp/cache/views/empty
-/tmp/sessions/*
-!/tmp/sessions/empty
-/tmp/tests/*
-!/tmp/tests/empty
+.env.local
+.env.*.local
 
-/logs/*
-!/logs/empty
+# IDE & Editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.DS_Store
 
-# CakePHP 2
+# Node modules (if using npm/node-based tools)
+node_modules/
+npm-debug.log
+yarn-error.log
 
-/app/tmp/*
-/app/Config/core.php
-/app/Config/database.php
-/vendors/*
-/.idea
-/.env
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+
+# OS specific
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Build & Cache
+/build/
+/cache/
+*.cache
+
+# Test Coverage
+/coverage/
+.phpunit.result.cache
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Directory-specific
+/uploads/*
+!/uploads/.gitkeep
+/storage/*
+!/storage/.gitkeep
