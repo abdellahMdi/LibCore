@@ -12,6 +12,8 @@ class Library
         echo "2. Gérer les membres \n";
         echo "3. Retirer livre \n";
         echo "4. Réparer livre \n";
+        echo "5. afficher livre \n";
+
         echo "5. Quitter \n";
         echo "=============================================\n";
 
@@ -156,4 +158,16 @@ public function deleteLivre ()
         }
     }
 
+    public function getAllBooks()
+    {
+        $con = \DB::connect();
+        $sqlState =  $con->query("SELECT * FROM books");
+        $books = $sqlState->fetchAll(\PDO::FETCH_OBJ);
+
+        echo "\n===== BOOKS LIST =====\n";
+
+        foreach ($books as $book) {
+            echo "ID: {$book->isbn} | Title: {$book->titre} | Author: {$book->auteur} | Status: {$book->etat}\n";
+        }
+    }
 }

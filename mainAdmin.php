@@ -23,8 +23,8 @@ while ($continuer) {
             $maBibliotheque -> repareLivre();
             break;
         case 5:
-            echo "Au revoir !\n";
-            $continuer = false;
+           $maBibliotheque->getAllBooks();
+
             break;
         default:
             echo "Choix invalide. Veuillez réessayer.\n";
