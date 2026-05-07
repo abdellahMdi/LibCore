@@ -1,5 +1,5 @@
 <?php
-include_once 'server/Library.php';
+require_once __DIR__ . '/src/services/Library.php';
 $continuer = true;
 
 while ($continuer) {
@@ -8,7 +8,7 @@ while ($continuer) {
     switch ($choix) {
         case 1:
             echo "=> Lancement de l'ajout d'un livre...\n";
-            // Hna ghadi t3yyt l la méthode d'ajout f Library
+
             break;
         case 2:
             echo "=> Création d'un membre...\n";
@@ -21,7 +21,7 @@ while ($continuer) {
             break;
         case 5:
             echo "Au revoir !\n";
-            $continuer = false; // Hadi li katsali l'programme
+            $continuer = false;
             break;
         default:
             echo "Choix invalide. Veuillez réessayer.\n";
