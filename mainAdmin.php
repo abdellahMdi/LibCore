@@ -1,17 +1,20 @@
 <?php
 require_once __DIR__ . '/src/services/Library.php';
+use LibCore\services\Library;
+$maBibliotheque = new Library() ;
 $continuer = true;
 
 while ($continuer) {
-    $choix = showMenuLibrarian();
+
+    $choix =$maBibliotheque-> showMenuLibrarian();
 
     switch ($choix) {
         case 1:
-            echo "=> Lancement de l'ajout d'un livre...\n";
+           $maBibliotheque -> AjouterLivre();
 
             break;
         case 2:
-            echo "=> Création d'un membre...\n";
+          $maBibliotheque -> AjouterMembre();
             break;
         case 3:
             echo "=> Affichage du stock...\n";
