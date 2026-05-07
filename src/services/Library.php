@@ -10,8 +10,8 @@ class Library
         echo "=============================================\n";
         echo "1. Ajouter un livre \n";
         echo "2. Gérer les membres \n";
-        echo "3. Consulter les stocks \n";
-        echo "4. Retirer / réparer livre \n";
+        echo "3. Retirer livre \n";
+        echo "4. Réparer livre \n";
         echo "5. Quitter \n";
         echo "=============================================\n";
 
@@ -95,4 +95,65 @@ class Library
             echo "[Erreur] Impossible d'ajouter ce membre. (L'email existe peut-être déjà ?)\n";
         }
     }
+
+public function deleteLivre ()
+{
+    echo "\n--- DELETE LIVRE ---\n";
+
+
+    $isbn_id   = trim(readline("ISBN : "));
+
+
+
+    if (empty($isbn_id)) {
+        echo "[Erreur] L'ISBN sont obligatoires !\n";
+        return;
+    }
+
+    try {
+        $con = \DB::connect();
+        $sql = "DELETE FROM books WHERE `books`.`isbn` = :isbn";
+
+        $stmt = $con->prepare($sql);
+        $stmt->execute([
+            ':isbn'   => $isbn_id
+        ]);
+
+        echo "[Succès] Le livre  a été SUPREMER à la bibliothèque avec succès !\n";
+
+    } catch (PDOException $e) {
+        echo "[Erreur] Impossible SUPREMER ce livre. \n";
+    }
+}
+
+    public function repareLivre ()
+    {
+        echo "\n--- REPARE LIVRE ---\n";
+
+
+        $isbn_id   = trim(readline("ISBN : "));
+
+
+
+        if (empty($isbn_id)) {
+            echo "[Erreur] L'ISBN sont obligatoires !\n";
+            return;
+        }
+
+        try {
+            $con = \DB::connect();
+            $sql = "UPDATE `books` SET `etat` = 'En reparation' WHERE `books`.`etat`= 'Disponible' AND `books`.`isbn` = :isbn";
+
+            $stmt = $con->prepare($sql);
+            $stmt->execute([
+                ':isbn'   => $isbn_id
+            ]);
+
+            echo "[Succès] Le livre  a été REPARE à la bibliothèque avec succès !\n";
+
+        } catch (PDOException $e) {
+            echo "[Erreur] Impossible REPARE ce livre. \n";
+        }
+    }
+
 }

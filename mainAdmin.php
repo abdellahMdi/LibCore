@@ -17,10 +17,10 @@ while ($continuer) {
           $maBibliotheque -> AjouterMembre();
             break;
         case 3:
-            echo "=> Affichage du stock...\n";
+           $maBibliotheque -> deleteLivre();
             break;
         case 4:
-            echo "=> Maintenance du matériel...\n";
+            $maBibliotheque -> repareLivre();
             break;
         case 5:
             echo "Au revoir !\n";
