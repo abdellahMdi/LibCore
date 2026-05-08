@@ -155,6 +155,41 @@ function displayLivres(array $livress) {
     echo "------------------------------------------------------------\n";
 }
 
+function getMyEmpreints($conn, $memberId) {
+    $sql = "SELECT books.isbn, books.titre, books.auteur, books.etat, emprunts.borrowing_date FROM books 
+            INNER JOIN emprunts ON books.isbn = emprunts.book_isbn 
+            WHERE emprunts.member_id = " . $memberId ;
+
+    $stm = $conn->query($sql);
+    $allDt = $stm->fetchAll();
+
+    return $allDt;
+}
+
+function displayMyEmpreints($books) {
+    // 1. Check if we actually have books
+    if (empty($books)) {
+        echo "No books found.\n";
+        return;
+    }
+    echo "--------------------------------------------------------------------------\n";
+    echo "--------------------------------------------------------------------------\n";
+    $total = count($books);
+    for ($i = 0; $i < $total; $i++) {
+        echo "ISBN : " . $books[$i]['isbn'] . " | ";
+        echo "TITRE :" . $books[$i]['titre'] . " | ";
+        echo "AUTEUR : " . $books[$i]['auteur'] . " | ";
+        echo "DATE EMPRUNT : " . $books[$i]['borrowing_date'] . "\n";
+        echo "--------------------------------------------------------------------------\n";
+    }
+
+    echo "--------------------------------------------------------------------------\n";
+    echo "==========================================================================\n";
+
+    echo "========== Total books: " . $total . "\n";
+    echo "==========================================================================\n";
+}
+
 function leaveOrContinue($conn, $member){
     $choix = readline("Want to continue ? (y/n): ");
     if($choix == "y" || $choix == "Y" ){
@@ -198,6 +233,7 @@ function displayMemberMenu($conn, $member) {
             break;
 
         case 4:
+            displayMyEmpreints(getMyEmpreints($conn, $member->getId()));
             leaveOrContinue($conn, $member);
             break;
 
