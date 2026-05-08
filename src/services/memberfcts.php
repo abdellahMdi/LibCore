@@ -1,11 +1,17 @@
 <?php 
-namespace LibCore\Entities;
+require_once __DIR__."/../Entities/User.php";
+require_once __DIR__."/../Entities/Member.php";
+require_once __DIR__."/../Entities/Book.php";
+require_once __DIR__."/../Entities/User.php";
 require_once __DIR__ . "/../../config/db.php";
-$conn = 'idk';
+use LibCore\Entities\Book;
+use LibCore\Entities\Member;
+
+
+$conn = DB::connect();
 
 function getAllMembers($conn){
     $sql = "SELECT users.id, users.nom, users.email, members.role FROM users JOIN members ON users.id = members.user_id";
-
     $res = $conn->query($sql);
 
     $allRows = $res->fetchAll();
@@ -32,12 +38,12 @@ function logInMyMember($members) {
     echo "-----------------------\n";
 
     while (true) {
-        $choice = readline("Enter a valid ID from the list: ");
+        echo "Enter a valid ID from the list: ";
+        $choice = readline();
 
         foreach ($members as $member) {
             if ($choice == $member->getId()) {
-                echo "Success!";
-                
+                echo "\n Success!";
                 return $member; 
             }
         }
@@ -111,7 +117,7 @@ function borrowBook($conn, $id_mem, $isbn) {
 
 function rendreLivre($conn, $id_mem, $isbn) {
     
-    $sql = "SELECT id FROM emprunts WHERE member_id = ? AND book_isbn = ? AND return_date = NULL";
+    $sql = "SELECT id FROM emprunts WHERE member_id = ? AND book_isbn = ? AND return_date IS NULL";
     $stmtCheck = $conn->prepare($sql);
     $stmtCheck->execute([$id_mem,$isbn]);
     $loan = $stmtCheck->fetch();
