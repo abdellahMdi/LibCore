@@ -2,17 +2,25 @@
 require_once __DIR__."/../Entities/User.php";
 require_once __DIR__."/../Entities/Member.php";
 require_once __DIR__."/../Entities/Book.php";
-require_once __DIR__."/../Entities/User.php";
 require_once __DIR__ . "/../../config/db.php";
 use LibCore\Entities\Book;
 use LibCore\Entities\Member;
 
 
-$conn = DB::connect();
+ 
 
-function getAllMembers($conn){
+class gestionMember {
+
+public $conn ;
+
+   
+public function  __construct() {
+   $this->conn =  DB::connect();
+}
+
+    function getAllMembers(){
     $sql = "SELECT users.id, users.nom, users.email, members.role FROM users JOIN members ON users.id = members.user_id";
-    $res = $conn->query($sql);
+    $res = $this->conn->query($sql);
 
     $allRows = $res->fetchAll();
 
@@ -52,9 +60,9 @@ function logInMyMember($members) {
     }
 }
 
-function getAllBooks($conn) {
+function getAllBooks() {
     $sql = "SELECT * FROM books";
-    $res = $conn->query($sql);
+    $res = $this->conn->query($sql);
     $allBks = $res->fetchAll();
 
     $booksList = [];
@@ -83,27 +91,27 @@ function searchBookByNm($books, $searchTerm) {
     return $similar;
 }
 
-function isAvailable($conn,$isbn){
+function isAvailable($isbn){
     $sql = "SELECT etat FROM books WHERE isbn = ?";
-    $Check = $conn->prepare($sql);
+    $Check = $this->conn->prepare($sql);
     $Check->execute([$isbn]);
     $book = $Check->fetch();
     return $book ;
 }
 
-function borrowBook($conn, $id_mem, $isbn) {
-    $book = isAvailable($conn,$isbn);
+function borrowBook($id_mem, $isbn) {
+    $book = $this->isAvailable($isbn);
 
     if ($book && $book['etat'] == 'disponible') {
         
         $date_today = date('Y-m-d');
         $insert = "INSERT INTO emprunts (borrowing_date, member_id, book_isbn) VALUES (?, ?, ?)";
-        $stmInsert = $conn->prepare($insert);
+        $stmInsert = $this->conn->prepare($insert);
         $stmInsert->execute([$date_today, $id_mem,$isbn]);
 
         
         $update = "UPDATE books SET etat = 'Emprunté' WHERE isbn = ?";
-        $stmtUpdate = $conn->prepare($update);
+        $stmtUpdate = $this->conn->prepare($update);
         $stmtUpdate->execute([$isbn]);
 
         echo "Success! The book is now yours.";
@@ -115,21 +123,21 @@ function borrowBook($conn, $id_mem, $isbn) {
     }
 }
 
-function rendreLivre($conn, $id_mem, $isbn) {
+function rendreLivre($id_mem, $isbn) {
     
     $sql = "SELECT id FROM emprunts WHERE member_id = ? AND book_isbn = ? AND return_date IS NULL";
-    $stmtCheck = $conn->prepare($sql);
+    $stmtCheck = $this->conn->prepare($sql);
     $stmtCheck->execute([$id_mem,$isbn]);
     $loan = $stmtCheck->fetch();
 
     if ($loan) {
         $closeEmprunt = "UPDATE emprunts SET return_date = ? WHERE id = ?";
         
-        $stmCloseEmprunt = $conn->prepare($closeEmprunt);
+        $stmCloseEmprunt = $this->conn->prepare($closeEmprunt);
         $stmCloseEmprunt->execute([date('Y-m-d'),$loan['id']]);
 
         $sql = "UPDATE books SET etat = 'disponible' WHERE isbn = ?";
-        $stmtUpdateBook = $conn->prepare($sql);
+        $stmtUpdateBook = $this->conn->prepare($sql);
         $stmtUpdateBook->execute([$isbn]);
 
         echo "Success! The book has been returned and is now available.";
@@ -155,12 +163,12 @@ function displayLivres(array $livress) {
     echo "------------------------------------------------------------\n";
 }
 
-function getMyEmpreints($conn, $memberId) {
+function getMyEmpreints($memberId) {
     $sql = "SELECT books.isbn, books.titre, books.auteur, books.etat, emprunts.borrowing_date FROM books 
             INNER JOIN emprunts ON books.isbn = emprunts.book_isbn 
             WHERE emprunts.member_id = " . $memberId ;
 
-    $stm = $conn->query($sql);
+    $stm = $this->conn->query($sql);
     $allDt = $stm->fetchAll();
 
     return $allDt;
@@ -190,16 +198,16 @@ function displayMyEmpreints($books) {
     echo "==========================================================================\n";
 }
 
-function leaveOrContinue($conn, $member){
+function leaveOrContinue($member){
     $choix = readline("Want to continue ? (y/n): ");
     if($choix == "y" || $choix == "Y" ){
-        displayMemberMenu($conn, $member);
+        displayMemberMenu($member);
     }else if($choix == "n" || $choix == "N" ){
         exit ;
     }
 }
 
-function displayMemberMenu($conn, $member) {
+function displayMemberMenu($member) {
     echo "\n--- MENU MEMBRE ---\n";
     echo "1. Rechercher un livre \n";
     echo "2. Emprunter un livre \n";
@@ -209,45 +217,12 @@ function displayMemberMenu($conn, $member) {
     echo "Choisissez une option : ";
 
     $choix = readline();
-
-    switch ($choix) {
-        case 1:
-            echo "Entrez le titre du livre : ";
-            $titre = readline();
-            searchBookByNm(getAllBooks($conn), $titre);
-            leaveOrContinue($conn, $member);
-            break;
-
-        case 2:
-            echo "Entrez l'ISBN du livre à emprunter : ";
-            $isbn = readline();
-            borrowBook($conn, $member->getId(), $isbn);
-            leaveOrContinue($conn, $member);
-            break;
-
-        case 3:
-            echo "Entrez l'ISBN du livre à rendre : ";
-            $isbn = readline();
-            rendreLivre($conn, $member->getId(), $isbn);
-            leaveOrContinue($conn, $member);
-            break;
-
-        case 4:
-            displayMyEmpreints(getMyEmpreints($conn, $member->getId()));
-            leaveOrContinue($conn, $member);
-            break;
-
-        case 5:
-            echo "Au revoir !\n";
-            exit;
-
-        default:
-            echo "Option invalide";
-            displayMemberMenu($conn, $member);
-            break;
-    }
+    return $choice ;
 }
 
-function startMember($conn){
-    displayMemberMenu($conn, logInMyMember(getAllMembers($conn)));
+function startMember(){
+   ;
 }
+
+}
+
